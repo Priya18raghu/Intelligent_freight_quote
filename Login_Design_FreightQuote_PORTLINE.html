@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FreightQuote AI / PORTLINE — Login Design</title>
+<style>
+  :root{
+    --navy-900:#0a1628; --navy-800:#0b2f56; --navy-600:#12518f;
+    --accent:#ea580c; --accent-600:#c2410c; --accent-50:#fff5ed;
+    --ink:#1c2430; --ink-2:#4b5563; --ink-3:#8b95a1;
+    --line:#dde3ea; --bg:#f3f5f8; --white:#fff;
+    --danger:#b91c1c; --danger-bg:#fef2f2;
+    --r:10px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 20px 60px}
+  .label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-3);margin:26px 0 10px;font-weight:600}
+
+  .screen{display:grid;grid-template-columns:1.05fr 1fr;min-height:660px;background:var(--white);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+
+  /* ---------- left maritime panel ---------- */
+  .brand{background:var(--navy-900);color:#fff;padding:44px 46px;display:flex;flex-direction:column;
+    justify-content:space-between;position:relative;overflow:hidden}
+  /* sea-lane arcs */
+  .arcs{position:absolute;inset:0;opacity:.16}
+  .arcs svg{width:100%;height:100%}
+  .glow{position:absolute;right:-120px;top:-80px;width:360px;height:360px;border-radius:50%;
+    background:radial-gradient(circle,rgba(234,88,12,.30),transparent 68%)}
+
+  .logo{display:flex;align-items:center;gap:12px;position:relative;z-index:2}
+  .logo-mark{width:36px;height:36px;border-radius:8px;background:var(--accent);display:grid;place-items:center}
+  .logo-mark svg{width:20px;height:20px}
+  .logo-name{font-size:19px;font-weight:800;letter-spacing:.5px}
+  .logo-sub{font-family:var(--mono);font-size:9px;letter-spacing:2.4px;color:rgba(255,255,255,.5);margin-top:2px}
+
+  .pitch{position:relative;z-index:2}
+  .pitch h1{font-size:30px;line-height:1.22;font-weight:700;letter-spacing:-.7px;margin-bottom:14px}
+  .pitch p{font-size:14px;line-height:1.65;color:rgba(255,255,255,.6);max-width:350px}
+  .agents{display:flex;flex-wrap:wrap;gap:7px;margin-top:26px}
+  .chip{font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:rgba(255,255,255,.8)}
+  .foot{font-size:11.5px;color:rgba(255,255,255,.35);position:relative;z-index:2}
+
+  /* ---------- right form ---------- */
+  .panel{padding:40px 56px;display:flex;flex-direction:column;justify-content:center}
+  .panel-inner{width:100%;max-width:380px;margin:0 auto}
+
+  .tabs{display:flex;background:#eef1f5;border-radius:var(--r);padding:4px;margin-bottom:26px}
+  .tab{flex:1;text-align:center;padding:9px;font-size:13px;font-weight:650;border-radius:7px;
+    color:var(--ink-2);cursor:pointer;transition:.15s;border:0;background:none;font-family:inherit}
+  .tab.active{background:#fff;color:var(--navy-800);box-shadow:0 1px 3px rgba(16,24,40,.1)}
+
+  .panel h2{font-size:23px;font-weight:700;letter-spacing:-.4px;margin-bottom:6px}
+  .panel .sub{font-size:13.5px;color:var(--ink-2);margin-bottom:24px;line-height:1.55}
+
+  .field{margin-bottom:15px}
+  .field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+  .field input{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r);
+    font-size:14px;font-family:inherit;background:#fff;transition:.15s}
+  .field input::placeholder{color:#b4bcc5}
+  .field input:focus{outline:none;border-color:var(--navy-600);box-shadow:0 0 0 3px rgba(18,81,143,.11)}
+  .field.err input{border-color:var(--danger);background:var(--danger-bg)}
+  .hint{font-size:11.5px;color:var(--danger);margin-top:5px}
+
+  .pw-wrap{position:relative}
+  .pw-toggle{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11.5px;
+    color:var(--ink-3);cursor:pointer;font-weight:600;background:none;border:0;font-family:inherit}
+
+  .row{display:flex;justify-content:space-between;align-items:center;margin:4px 0 22px}
+  .check{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .check input{width:15px;height:15px;accent-color:var(--navy-800)}
+  .link{font-size:13px;color:var(--navy-600);text-decoration:none;font-weight:600}
+  .link:hover{text-decoration:underline}
+
+  .btn{width:100%;padding:12.5px;background:var(--accent);color:#fff;border:0;border-radius:var(--r);
+    font-size:14.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;
+    display:flex;align-items:center;justify-content:center;gap:9px}
+  .btn:hover{background:var(--accent-600)}
+  .btn.dark{background:var(--navy-800)}
+  .btn.dark:hover{background:var(--navy-900)}
+  .btn.loading{background:var(--accent-600);cursor:wait}
+  .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+    border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .sso{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:11px;
+    border:1.5px solid var(--line);border-radius:var(--r);background:#fff;font-size:14px;font-weight:600;
+    cursor:pointer;transition:.15s;color:var(--ink);font-family:inherit}
+  .sso:hover{border-color:var(--navy-600);background:#f7f9fc}
+  .ms{width:15px;height:15px;display:grid;grid-template-columns:1fr 1fr;gap:1.5px}
+  .ms i{display:block}
+  .ms i:nth-child(1){background:#f25022}.ms i:nth-child(2){background:#7fba00}
+  .ms i:nth-child(3){background:#00a4ef}.ms i:nth-child(4){background:#ffb900}
+
+  .or{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--ink-3);font-size:11.5px}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .alert{background:var(--danger-bg);border:1px solid #fecaca;border-left:3px solid var(--danger);
+    border-radius:8px;padding:11px 13px;font-size:13px;color:#7f1d1d;margin-bottom:20px;line-height:1.5}
+  .notice{background:var(--accent-50);border:1px solid #fed7aa;border-left:3px solid var(--accent);
+    border-radius:8px;padding:11px 13px;font-size:12.5px;color:#7c2d12;margin-bottom:20px;line-height:1.55}
+
+  .legal{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:11.5px;color:var(--ink-3);line-height:1.6}
+
+  @media(max-width:920px){.screen{grid-template-columns:1fr}.brand{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="label">Screen 1 — Broker sign in (internal staff)</div>
+<div class="screen">
+  <div class="brand">
+    <div class="glow"></div>
+    <div class="arcs">
+      <svg viewBox="0 0 600 700" preserveAspectRatio="none">
+        <path d="M-40 520 Q 180 300 620 400" stroke="#7dd3fc" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <path d="M-40 600 Q 240 420 620 300" stroke="#7dd3fc" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <path d="M-40 430 Q 200 560 620 520" stroke="#fdba74" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <circle cx="90" cy="497" r="4.5" fill="#fdba74"/>
+        <circle cx="520" cy="392" r="4.5" fill="#7dd3fc"/>
+        <circle cx="300" cy="378" r="3.5" fill="#7dd3fc"/>
+      </svg>
+    </div>
+
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="12" rx="1.5"/><path d="M6 7v12M10 7v12M14 7v12M18 7v12"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">PORTLINE</div>
+        <div class="logo-sub">GLOBAL FREIGHT FORWARDING</div>
+      </div>
+    </div>
+
+    <div class="pitch">
+      <h1>Five agents.<br>One quotation.<br>Sixty seconds.</h1>
+      <p>Route, pricing, weather, customs and margin — analysed in parallel, fused into a single priced quote with the reasoning behind every number.</p>
+      <div class="agents">
+        <span class="chip">Route</span><span class="chip">Pricing</span><span class="chip">Weather</span>
+        <span class="chip">Customs</span><span class="chip">Margin</span>
+      </div>
+    </div>
+
+    <div class="foot">FreightQuote AI · Agentic Maritime Brokerage Platform</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-inner">
+      <div class="tabs">
+        <button class="tab active">Broker login</button>
+        <button class="tab">Customer portal</button>
+      </div>
+
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to the brokerage workbench.</p>
+
+      <button class="sso">
+        <span class="ms"><i></i><i></i><i></i><i></i></span>
+        Continue with Microsoft
+      </button>
+
+      <div class="or">or use your credentials</div>
+
+      <div class="field">
+        <label>Work email</label>
+        <input type="email" placeholder="you@portline.com" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" placeholder="••••••••••" autocomplete="current-password">
+          <button class="pw-toggle">SHOW</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="check"><input type="checkbox"> Keep me signed in</label>
+        <a href="#" class="link">Forgot password?</a>
+      </div>
+
+      <button class="btn dark">Sign in to workbench</button>
+
+      <div class="legal">
+        Pricing Manager, Compliance and Admin accounts require two-factor authentication.
+        Access issues? Contact <a href="#" class="link">itsupport@portline.com</a>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="label">Screen 2 — Customer portal sign in (external, second tab active)</div>
+<div class="screen">
+  <div class="brand">
+    <div class="glow"></div>
+    <div class="arcs">
+      <svg viewBox="0 0 600 700" preserveAspectRatio="none">
+        <path d="M-40 520 Q 180 300 620 400" stroke="#7dd3fc" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <path d="M-40 600 Q 240 420 620 300" stroke="#7dd3fc" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <path d="M-40 430 Q 200 560 620 520" stroke="#fdba74" stroke-width="1.4" fill="none" stroke-dasharray="5 7"/>
+        <circle cx="90" cy="497" r="4.5" fill="#fdba74"/>
+        <circle cx="520" cy="392" r="4.5" fill="#7dd3fc"/>
+      </svg>
+    </div>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="12" rx="1.5"/><path d="M6 7v12M10 7v12M14 7v12M18 7v12"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">PORTLINE</div>
+        <div class="logo-sub">GLOBAL FREIGHT FORWARDING</div>
+      </div>
+    </div>
+    <div class="pitch">
+      <h1>Your quotes,<br>your shipments,<br>one place.</h1>
+      <p>Request a rate, track every quotation, accept online and download your documents — without a single email thread.</p>
+    </div>
+    <div class="foot">Customer Portal · Secure access</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-inner">
+      <div class="tabs">
+        <button class="tab">Broker login</button>
+        <button class="tab active">Customer portal</button>
+      </div>
+
+      <h2>Customer sign in</h2>
+      <p class="sub">Access your quotations and shipment requests.</p>
+
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" placeholder="you@yourcompany.com" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" placeholder="••••••••••" autocomplete="current-password">
+          <button class="pw-toggle">SHOW</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="check"><input type="checkbox"> Keep me signed in</label>
+        <a href="#" class="link">Forgot password?</a>
+      </div>
+
+      <button class="btn">Sign in</button>
+
+      <div class="or">new customer?</div>
+
+      <button class="sso">Request portal access →</button>
+
+      <div class="legal">
+        Portal access is approved by your account manager. Requests are usually
+        actioned within one business day.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="label">Screen 3 — Error + rate-limit lockout state</div>
+<div class="screen">
+  <div class="brand">
+    <div class="glow"></div>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="12" rx="1.5"/><path d="M6 7v12M10 7v12M14 7v12M18 7v12"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">PORTLINE</div>
+        <div class="logo-sub">GLOBAL FREIGHT FORWARDING</div>
+      </div>
+    </div>
+    <div class="pitch">
+      <h1>Five agents.<br>One quotation.<br>Sixty seconds.</h1>
+      <p>Route, pricing, weather, customs and margin — analysed in parallel, fused into a single priced quote with the reasoning behind every number.</p>
+    </div>
+    <div class="foot">FreightQuote AI · Agentic Maritime Brokerage Platform</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-inner">
+      <div class="tabs">
+        <button class="tab active">Broker login</button>
+        <button class="tab">Customer portal</button>
+      </div>
+
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to the brokerage workbench.</p>
+
+      <div class="alert">
+        <strong>Too many attempts.</strong> For your security this account is locked for
+        <strong>14 minutes</strong>. Reset your password to unlock it immediately.
+      </div>
+
+      <div class="field err">
+        <label>Work email</label>
+        <input type="email" value="ravi.k@portline.com">
+      </div>
+
+      <div class="field err">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" value="••••••••">
+          <button class="pw-toggle">SHOW</button>
+        </div>
+        <div class="hint">⚠ Account temporarily locked</div>
+      </div>
+
+      <div class="row">
+        <label class="check"><input type="checkbox" disabled> Keep me signed in</label>
+        <a href="#" class="link">Reset password →</a>
+      </div>
+
+      <button class="btn loading"><span class="spin"></span> Locked — 13:58 remaining</button>
+
+      <div class="legal">
+        Pricing Manager, Compliance and Admin accounts require two-factor authentication.
+        Access issues? Contact <a href="#" class="link">itsupport@portline.com</a>.
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
